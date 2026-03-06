@@ -3,3 +3,7 @@ kotlin = "2.3.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+[libraries]
+spring = { module = "org.springframework:spring-context", version = "6.1.5" }
+jakarta = { module = "jakarta.annotation:jakarta.annotation-api", version = "2.1.1" }

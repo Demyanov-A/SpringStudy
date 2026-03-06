@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation(libs.spring)
+    implementation(libs.jakarta)
 }
 
 kotlin {
