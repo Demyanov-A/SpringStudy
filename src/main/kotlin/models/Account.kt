@@ -6,5 +6,5 @@ import kotlin.uuid.Uuid
 data class Account @OptIn(ExperimentalUuidApi::class) constructor(
     val id: Uuid = Uuid.random(),
     val userId: Uuid,
-    val mooneyAmount: Double,
+    var mooneyAmount: Double,
 )

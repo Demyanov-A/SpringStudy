@@ -1,12 +1,31 @@
 package ru.demyanovaf.kotlin
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
-import ru.demyanovaf.kotlin.services.UserService
+import ru.demyanovaf.kotlin.services.OperationsConsoleListener
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 fun main(args: Array<String>) {
-    val context = AnnotationConfigApplicationContext()
+    val context = AnnotationConfigApplicationContext("ru.demyanovaf.kotlin")
 
-    val userService = context.getBean(UserService::class.java)
-    userService.toString()
+    val operationsConsoleListener = context.getBean(OperationsConsoleListener::class.java)
+    operationsConsoleListener.createUser("login1")
+    val users = operationsConsoleListener.showAll()
+    println(users)
+    operationsConsoleListener.addAccount(users.first().id)
+    println(users)
+    /*operationsConsoleListener.accountDeposit(users.first().accountList.first().id)
+    println(users)
+    operationsConsoleListener.accountDeposit(users.first().accountList.first().id)
+    println(users)*/
+    operationsConsoleListener.accountTransfer(
+        users.first().accountList.first().id,
+        users.first().accountList.last().id,
+        11.0
+    )
+    println(users)
+    operationsConsoleListener.findAccountById(Uuid.random())
+    operationsConsoleListener.findUserById(Uuid.random())
 }
 
