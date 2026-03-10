@@ -51,10 +51,11 @@ class AccountService(@Value($$"${account.default-amount}") val defaultAmount: Do
     @OptIn(ExperimentalUuidApi::class)
     fun accountClose(id: Uuid) {
         findById(id)?.let { source ->
-            createdAccounts.find { destination -> destination.userId == source.userId && destination.id != source.id }?.apply {
-                accountTransfer(source.id, this.id, source.moneyAmount)
-                createdAccounts.remove(source)
-            }?: println("Last account cant be closed")
+            createdAccounts.find { destination -> destination.userId == source.userId && destination.id != source.id }
+                ?.apply {
+                    accountTransfer(source.id, this.id, source.moneyAmount)
+                    createdAccounts.remove(source)
+                } ?: println("Last account cant be closed")
         }
     }
 }

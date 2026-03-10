@@ -11,8 +11,9 @@ class AccountDepositCommand(val accountService: AccountService) : IOperationComm
         val readln = readlnOrNull().toString().split(",")
         try {
             accountService.accountDeposit(
-                Uuid.parse(readln.first()), readln.last().toDouble())
-        }catch (e: Exception){
+                Uuid.parse(readln.first()), readln.last().toDouble()
+            )
+        } catch (e: Exception) {
             println("Error: ${e.message}")
         }
     }

@@ -7,12 +7,12 @@ import kotlin.uuid.Uuid
 
 class AccountCreateCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
     @OptIn(ExperimentalUuidApi::class)
-    override fun execute(){
+    override fun execute() {
         println("Enter id of user:")
-        try{
+        try {
             val readln = readlnOrNull().toString()
             userService.findById(Uuid.parse(readln))?.accountList?.add(accountService.createAccount(Uuid.parse(readln)))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println("Error: ${e.message}")
         }
     }

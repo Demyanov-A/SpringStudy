@@ -7,7 +7,7 @@ import kotlin.uuid.Uuid
 
 class AccountCloseCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
     @OptIn(ExperimentalUuidApi::class)
-    override fun execute()  {
+    override fun execute() {
         println("Enter id of account:")
         try {
             accountService.findById(Uuid.parse(readlnOrNull().toString()))?.let {
@@ -18,7 +18,7 @@ class AccountCloseCommand(val userService: UserService, val accountService: Acco
                     }
                 }
             }
-        }catch(e:Exception){
+        } catch (e: Exception) {
             println("Error: ${e.message}")
         }
     }

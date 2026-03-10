@@ -111,7 +111,7 @@ class AccountServiceTest {
     fun testAccountCloseNotLastAccount() {
         val userId = Uuid.random()
         val account1 = accountService.createAccount(userId)
-        val account2 = accountService.createAccount(userId)
+        accountService.createAccount(userId)
         accountService.accountClose(account1.id)
     }
 

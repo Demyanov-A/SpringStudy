@@ -16,7 +16,7 @@ import ru.demyanovaf.kotlin.commands.ShowAllCommand
 @Component
 class OperationsConsoleListener(userService: UserService, accountService: AccountService) {
 
-    enum class ConsoleOperationType{
+    enum class ConsoleOperationType {
         ACCOUNT_CREATE,
         SHOW_ALL_USERS,
         ACCOUNT_CLOSE,
@@ -42,16 +42,17 @@ class OperationsConsoleListener(userService: UserService, accountService: Accoun
 
     @Bean
     fun startConsole() {
-        println("Please enter one of operation type:\n" +
-                "-ACCOUNT_CREATE\n" +
-                "-SHOW_ALL_USERS\n" +
-                "-ACCOUNT_CLOSE\n" +
-                "-ACCOUNT_WITHDRAW\n" +
-                "-ACCOUNT_DEPOSIT\n" +
-                "-ACCOUNT_TRANSFER\n" +
-                "-USER_CREATE\n" +
-                "-FIND_USER_BY_ID\n" +
-                "-FIND_ACCOUNT_BY_ID"
+        println(
+            "Please enter one of operation type:\n" +
+                    "-ACCOUNT_CREATE\n" +
+                    "-SHOW_ALL_USERS\n" +
+                    "-ACCOUNT_CLOSE\n" +
+                    "-ACCOUNT_WITHDRAW\n" +
+                    "-ACCOUNT_DEPOSIT\n" +
+                    "-ACCOUNT_TRANSFER\n" +
+                    "-USER_CREATE\n" +
+                    "-FIND_USER_BY_ID\n" +
+                    "-FIND_ACCOUNT_BY_ID"
         )
 
         map[ConsoleOperationType.valueOf(readlnOrNull()!!)]?.execute().also { startConsole() }

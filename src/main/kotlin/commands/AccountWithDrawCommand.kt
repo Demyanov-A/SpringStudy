@@ -11,8 +11,9 @@ class AccountWithDrawCommand(val accountService: AccountService) : IOperationCom
         val readln = readlnOrNull().toString().split(",")
         try {
             accountService.accountWithdraw(
-                Uuid.parse(readln.first()), readln.last().toDouble())
-        }catch (e: Exception){
+                Uuid.parse(readln.first()), readln.last().toDouble()
+            )
+        } catch (e: Exception) {
             println("Error: ${e.message}")
         }
     }

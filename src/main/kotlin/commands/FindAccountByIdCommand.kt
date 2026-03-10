@@ -8,9 +8,9 @@ class FindAccountByIdCommand(val accountService: AccountService) : IOperationCom
     @OptIn(ExperimentalUuidApi::class)
     override fun execute() {
         println("Enter id of account:")
-        try{
+        try {
             println("${accountService.findById(Uuid.parse(readlnOrNull().toString()))}")
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println("Error: ${e.message}")
         }
     }
