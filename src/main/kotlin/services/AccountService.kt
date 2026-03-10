@@ -1,14 +1,16 @@
 package ru.demyanovaf.kotlin.services
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import ru.demyanovaf.kotlin.models.Account
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Service
-class AccountService {
-
-    val defaultAmount = 10.0
+class AccountService(
+    @Value($$"${account.default-amount}")
+    val defaultAmount: Double
+) {
 
     @OptIn(ExperimentalUuidApi::class)
     private val createdAccounts = mutableListOf<Account>()
