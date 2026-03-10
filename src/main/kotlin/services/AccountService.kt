@@ -7,10 +7,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Service
-class AccountService(
-    @Value($$"${account.default-amount}")
-    val defaultAmount: Double
-) {
+class AccountService(@Value($$"${account.default-amount}") val defaultAmount: Double) {
 
     @OptIn(ExperimentalUuidApi::class)
     private val createdAccounts = mutableListOf<Account>()
