@@ -15,7 +15,7 @@ class AccountService {
 
     @OptIn(ExperimentalUuidApi::class)
     fun createAccount(userId: Uuid): Account {
-        return Account(userId = userId, mooneyAmount = defaultAmount).apply { createdAccounts.add(this) }
+        return Account(userId = userId, moneyAmount = defaultAmount).apply { createdAccounts.add(this) }
     }
 
     @OptIn(ExperimentalUuidApi::class)
@@ -27,15 +27,15 @@ class AccountService {
 
     @OptIn(ExperimentalUuidApi::class)
     fun accountDeposit(id: Uuid, amount: Double) {
-        findById(id)?.mooneyAmount += amount
+        findById(id)?.moneyAmount += amount
     }
 
     @OptIn(ExperimentalUuidApi::class)
     fun accountTransfer(idSource: Uuid, idDestination: Uuid, amount: Double) {
         findById(idSource)?.let {
-            if (it.mooneyAmount >= amount) {
-                it.mooneyAmount -= amount
-                findById(idDestination)?.mooneyAmount += amount
+            if (it.moneyAmount >= amount) {
+                it.moneyAmount -= amount
+                findById(idDestination)?.moneyAmount += amount
             } else println("Amount of mooneyAmount less then $amount")
         }
     }
@@ -43,14 +43,19 @@ class AccountService {
     @OptIn(ExperimentalUuidApi::class)
     fun accountWithdraw(id: Uuid, amount: Double) {
         findById(id)?.let {
-            if (it.mooneyAmount >= amount) {
-                it.mooneyAmount -= amount
+            if (it.moneyAmount >= amount) {
+                it.moneyAmount -= amount
             } else println("Amount of mooneyAmount less then $amount")
         }
     }
 
     @OptIn(ExperimentalUuidApi::class)
     fun accountClose(id: Uuid) {
-        findById(id)?.apply { createdAccounts.removeIf { it.id == id } }
+        findById(id)?.let { source ->
+            createdAccounts.find { destination -> destination.userId == source.userId && destination.id != source.id }?.apply {
+                accountTransfer(source.id, this.id, source.moneyAmount)
+                createdAccounts.remove(source)
+            }?: println("Last account cant be closed")
+        }
     }
 }
