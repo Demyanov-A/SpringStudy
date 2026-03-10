@@ -2,9 +2,16 @@ package ru.demyanovaf.kotlin.services
 
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
+import ru.demyanovaf.kotlin.commands.AccountCloseCommand
+import ru.demyanovaf.kotlin.commands.AccountCreateCommand
+import ru.demyanovaf.kotlin.commands.AccountDepositCommand
+import ru.demyanovaf.kotlin.commands.AccountTransferCommand
+import ru.demyanovaf.kotlin.commands.AccountWithDrawCommand
+import ru.demyanovaf.kotlin.commands.CreateUserCommand
+import ru.demyanovaf.kotlin.commands.FindAccountByIdCommand
+import ru.demyanovaf.kotlin.commands.FindUserByIdCommand
 import ru.demyanovaf.kotlin.commands.IOperationCommand
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import ru.demyanovaf.kotlin.commands.ShowAllCommand
 
 @Component
 class OperationsConsoleListener(userService: UserService, accountService: AccountService) {
@@ -48,121 +55,5 @@ class OperationsConsoleListener(userService: UserService, accountService: Accoun
         )
 
         map[ConsoleOperationType.valueOf(readlnOrNull()!!)]?.execute().also { startConsole() }
-    }
-}
-
-class AccountCreateCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute(){
-        println("Enter id of user:")
-        try{
-            val readln = readlnOrNull().toString()
-            userService.findById(Uuid.parse(readln))?.accountList?.add(accountService.createAccount(Uuid.parse(readln)))
-        }catch (e: Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class AccountDepositCommand(val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter id of account and amount with delimiter ',':")
-        val readln = readlnOrNull().toString().split(",")
-        try {
-            accountService.accountDeposit(
-                Uuid.parse(readln.first()), readln.last().toDouble())
-        }catch (e: Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class AccountTransferCommand(val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter id of source account, id of destination account and amount with delimiter ',':")
-        val readln = readlnOrNull().toString().split(",")
-        try {
-            accountService.accountTransfer(
-                Uuid.parse(readln[0]),
-                Uuid.parse(readln[1]), readln[2].toDouble()
-            )
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class ShowAllCommand(val userService: UserService) : IOperationCommand {
-    override fun execute() {
-        println(if(!userService.showAll().isEmpty()) userService.showAll().joinToString("\n") else "No users find!")
-    }
-}
-
-class AccountWithDrawCommand(val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter id of account and amount with delimiter ',':")
-        val readln = readlnOrNull().toString().split(",")
-        try {
-            accountService.accountWithdraw(
-                Uuid.parse(readln.first()), readln.last().toDouble())
-        }catch (e: Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class AccountCloseCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute()  {
-        println("Enter id of account:")
-        try {
-            accountService.findById(Uuid.parse(readlnOrNull().toString()))?.let {
-                userService.findById(it.userId)?.apply {
-                    accountService.accountClose(it.id)
-                    if (this.accountList.size > 1) {
-                        this.accountList.remove(it)
-                    }
-                }
-            }
-        }catch(e:Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class FindAccountByIdCommand(val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter id of account:")
-        try{
-            println("${accountService.findById(Uuid.parse(readlnOrNull().toString()))}")
-        }catch (e: Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class FindUserByIdCommand(val userService: UserService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter id of user:")
-        try{
-            println("${userService.findById(Uuid.parse(readlnOrNull().toString()))}")
-        }catch (e: Exception){
-            println("Error: ${e.message}")
-        }
-    }
-}
-
-class CreateUserCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
-    @OptIn(ExperimentalUuidApi::class)
-    override fun execute() {
-        println("Enter login for new user:")
-        val login = readlnOrNull().toString()
-        val user = userService.createUser(login).apply { accountList.add(accountService.createAccount(this.id)) }
-        println("User created: User{id=${user.id}, login=${user.login}},accountList=${user.accountList}")
     }
 }
