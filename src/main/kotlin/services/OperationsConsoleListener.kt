@@ -114,7 +114,7 @@ class AccountWithDrawCommand(val accountService: AccountService) : IOperationCom
     }
 }
 
-class AccountCloseCommand(val userService: UserService, val accountService: AccountService): IOperationCommand {
+class AccountCloseCommand(val userService: UserService, val accountService: AccountService) : IOperationCommand {
     @OptIn(ExperimentalUuidApi::class)
     override fun execute()  {
         println("Enter id of account:")
