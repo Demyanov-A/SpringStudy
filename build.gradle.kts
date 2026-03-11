@@ -1,9 +1,11 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    kotlin("jvm") version "2.3.0"
+    alias(libs.plugins.kotlin.jvm)
 }
 
 group = "ru.demyanovaf.kotlin"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -11,6 +13,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation(libs.spring)
+    implementation(libs.jakarta)
 }
 
 kotlin {
@@ -19,4 +23,8 @@ kotlin {
 
 tasks.test {
     useJUnitPlatform()
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }
